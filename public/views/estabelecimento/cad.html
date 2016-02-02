@@ -1,0 +1,61 @@
+<form formAjax="1" enctype="multipart/form-data" class="well" action="<?= $this->url(array("controller" => "estabelecimento", "action" => "create"), null, true) ?>" method="post">
+    <input type="hidden" name="cadastrar" value="1" />
+
+    <div class="row-fluid">
+        <div class="span6">
+            <label for="nome_fantasia">Nome Fantasia</label>
+            <input type="text" required name="nome_fantasia" id="nome_fantasia"  class="input-xlarge" />
+
+            <label for="razao_social">Razão Social</label>
+            <input type="text" name="razao_social" id="razao_social"  class="input-xlarge" />            
+
+            <label>Estado</label>
+            <select name="estado" id="estado" class="input-xlarge">
+                <option value="">- selecione -</option>
+                <? foreach ($this->estado as $key => $estado): ?>
+                <option value="<?= $estado['id_estado'] ?>"><?= $estado['nome'] ?></option>
+                <? endforeach; ?>
+            </select>
+
+            <label for="bairro">Bairro</label>
+            <input type="text" required name="bairro" id="bairro"  class="input-xlarge" />
+
+            <label for="numero">Número</label>
+            <input type="text" name="numero" id="numero"  class="input-xlarge" />
+            
+            <label for="site">Site</label>
+            <input type="text" name="site" id="site"  class="input-xlarge" />
+            
+            <label for="email">Email</label>
+            <input type="text" name="email" id="email"  class="input-xlarge" />
+
+        </div>
+
+        <div class="span6">
+            <label>Categoria</label>
+            <select name="categoria" id="categoria" class="input-xlarge">
+                <option value="0">- selecione -</option>
+                <? foreach ($this->categoria as $key => $categoria): ?>
+                <option value="<?= $categoria['id_categoria'] ?>"><?= $categoria['nome'] ?></option>
+                <? endforeach; ?>
+            </select>
+
+            <label for="cnpj">CNPJ</label>
+            <input type="text" name="cnpj" id="cnpj"  class="input-xlarge" />            
+
+            <label for="cidade">Cidade</label>
+            <select id="cidade" name="cidade" class="input-xlarge">
+                <option>Selecione o Estado</option>
+            </select>
+
+            <label for="rua">Rua</label>
+            <input type="text" required name="rua" id="rua"  class="input-xlarge" />
+
+            <label for="telefone">Telefone</label>
+            <input type="text" name="telefone" id="telefone"  class="input-xlarge" />
+
+            <label for="arquivo">Arquivo</label>
+            <input id="arquivo" style="font-size: 14px;" type="file" name="arquivo"/>
+        </div>
+    </div>
+</form> 

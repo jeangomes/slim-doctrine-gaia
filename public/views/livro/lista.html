@@ -1,0 +1,32 @@
+<p>{{livros.length}} registros encontrados</p>
+<form class="form-horizontal" ng-submit="processar(autor)" ng-init="get()">
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Título</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" ng-model="search.titulo">
+        </div>
+        <label class="col-sm-2 control-label">Autor:</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" ng-model="search.autor">
+        </div>
+    </div>
+</form>
+<br>
+<div ng-app="ngAnimate">
+    <table class="table table-condensed table-bordered example-animate-container">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Autor</th>
+                <th>Páginas</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="animate-repeat" ng-repeat="livro in livros| orderBy:'titulo' | filter:{titulo: search.titulo, autor: search.autor}">
+                <td>{{livro.titulo}}</td>
+                <td>{{livro.autor}}</td>
+                <td>{{livro.ndepagina}}</td>      
+            </tr>
+        </tbody>
+    </table>
+</div>

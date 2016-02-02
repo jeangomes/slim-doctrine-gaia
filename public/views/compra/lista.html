@@ -1,0 +1,44 @@
+<div ng-init="load()">
+    <p>{{compras.length}} registros encontrados</p>
+    <form class="form-horizontal" ng-submit="processar(autor)" ng-init="get()">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Estabelecimento:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" ng-model="search.estab">
+            </div>
+        </div>
+    </form>
+    <br>
+    <table class="table table-condensed table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Estabelecimento</th>
+                <th>Data Compra</th>
+                <th>Subtotal</th>
+                <th>Desconto</th>
+                <th>Total</th>
+                <th>Dinheiro</th>
+                <th>Troco</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="compra in compras| orderBy:'-data_compra_order' | filter:{estabelecimento: search.estab}">
+                <td>{{compra.id}}</td>
+                <td>{{compra.estabelecimento}}</td>
+                <td>{{compra.data_compra}}</td>
+                <td>{{compra.subtotal|currency}}</td>
+                <td>{{compra.desconto|currency}}</td>
+                <td><strong>{{compra.total|currency}}</strong></td>
+                <td>{{compra.dinheiro|currency}}</td>
+                <td>{{compra.troco|currency}}</td>
+                <td>
+                    <div class="btn-group hide">
+                        <a href="#/edit-compra/{{compra.id}}" class="btn btn-info">Editar</a>
+                        <button ng-click="delete(compra.id, $index)" class="btn btn-warning">Excluir</button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

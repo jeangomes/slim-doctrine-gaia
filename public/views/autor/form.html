@@ -1,0 +1,26 @@
+<br>
+<form class="form-horizontal" ng-submit="processar(autor)" ng-init="get()">
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Autor</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" required ng-model="autor.nome">
+        </div>
+        <label class="col-sm-2 control-label">Nacionalidade</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" required ng-model="autor.nacionalidade">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Sexo</label>
+        <div class="col-sm-2">
+            <select required class="form-control" ng-model="autor.sexo">
+                <option value="">-- selecione --</option>
+                <option value="M">M</option>
+                <option value="F">F</option>
+            </select>
+        </div>
+    </div>
+    <div class="text-center">
+        <gaia-submit></gaia-submit>
+    </div>
+</form>

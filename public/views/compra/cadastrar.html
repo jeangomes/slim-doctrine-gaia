@@ -1,0 +1,209 @@
+<div ng-controller="CompraCtrl">
+    <h4>Total Geral: {{ compra.valor_total | currency}}</h4>
+    <form class="form-horizontal" ng-submit="processar(compra)" ng-init="init();">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Tipo</label>
+            <div class="col-sm-3">
+                <select class="form-control" ng-options="tipo.id_tipo as tipo.descricao for tipo in tiposCompra" ng-model="compra.tipo">
+                    <option value="">- selecione -</option>
+                </select>
+            </div>
+            <label class="col-sm-3 control-label">Forma de Pagamento</label>
+            <div class="col-sm-4">
+                <select class="form-control" ng-options="forma.id_forma as forma.descricao for forma in formasPgto" ng-model="compra.forma_pagamento" ng-change="verificarFormaPgto()">
+                    <option value="">- selecione -</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Cat. Estabelecimento</label>
+            <div class="col-sm-4">
+                <select class="form-control" ng-options="cat.id_cat as cat.cat for cat in categoriasEstab | orderBy:'cat'" ng-model="compra.categoriaestab"></select>
+            </div>
+
+            <label class="col-sm-2 control-label">Estabelecimento</label>
+            <div class="col-sm-4">                
+                <select ng-disabled="!estabelecimentos"  ng-model="compra.id_estabelecimento" class="form-control" 
+                        ng-options="estab.id_estab as estab.nome for estab in estabelecimentos | orderBy:'nome'">
+                    <option value="">- selecione -</option> 
+                </select>
+            </div>
+        </div> 
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Data da Compra</label>
+            <div class="col-sm-4">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" >
+                        <div class="input-group"><input type="text" class="form-control" data-ng-model="compra.data_compra"><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                        <datetimepicker data-ng-model="compra.data_compra" data-datetimepicker-config="{ dropdownSelector: '#dropdown2',minuteStep:1 }"/>
+                    </ul>
+                </div>
+            </div>
+            <label class="col-sm-2 control-label">Data do Pagamento</label>
+            <div class="col-sm-4">
+                <input class="form-control hide" ng-value="compra.data_compra" ng-model="compra.fds">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" >
+                        <div class="input-group"><input type="text" class="form-control" data-ng-model="compra.data_pagamento"><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                        <datetimepicker data-ng-model="compra.data_pagamento" data-datetimepicker-config="{ dropdownSelector: '#dropdown2',minuteStep:1 }"/>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <fieldset>
+            <legend>Itens do cupom     
+                <button ng-click="adicionar(compra.itensCupom)" class="btn btn-primary btn-sm pull-right" type="button">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+            </legend>
+            <!--
+            <input type="text" ng-keyup="pesquisar(search)" ng-model="search" class="form-control input-lg" placeholder="O que você procura?" autofocus autocomplete="off">
+            <div class="autocomplete" ng-show="completing">
+                <ul>
+                    <li ng-repeat="dica in dicas">{{dica.name}}</li>
+                </ul>                
+            </div> -->
+            <div ng-repeat="item in compra.itensCupom">
+                <div ng-show="item.descont" class="form-group" style="margin-bottom: 8px;">                                        
+
+                    <label class="col-sm-2 control-label">Desconto</label>
+                    <div class="col-sm-2">
+                        <input class="form-control" ng-model="item.vDesconto" ng-change="sumVTotal(item);" type="text">
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom: 8px;">                   
+                    <label class="col-sm-1 control-label">{{$index + 1}}</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" placeholder="Descrição" list="prod" ng-model="item.vDescricao" type="text">
+                    </div>
+                    <div class="col-sm-1">
+                        <input class="form-control" placeholder="Qtd" ng-model="item.vQtd" ng-change="sumVTotal(item);" type="text">
+                    </div>
+                    <div class="col-sm-2">
+                        <input class="form-control" placeholder="Valor Unit." ng-model="item.vVal_unit" ng-change="sumVTotal(item);" type="text">                        
+                    </div>
+                    <label class="col-sm-1 control-label">Total</label>
+                    <div class="col-sm-2">
+                        <input class="form-control" placeholder="Valor Total" ng-model="item.vTotal" type="text">
+                    </div>                
+                    <div class="col-sm-1 btn-group">
+                        <button class="btn btn-warning btn-xs" style="margin-top: 7px;" ng-click="item.descont = !item.descont" type="button">D</button>
+                        <button class="btn btn-danger" ng-click="remove($index)" type="button"><span class="glyphicon glyphicon-remove"></span></button>
+                    </div>
+                </div>
+                <hr style="margin: 5px 0 5px 0;">
+            </div>
+            <datalist id="prod">
+                <option  data-ng-repeat="prod in produtos" value="{{prod}}">
+            </datalist>
+        </fieldset>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">SubTotal</label>
+            <div class="col-sm-2">
+                <input class="form-control" ng-model="compra.subtotal" type="text">                
+            </div>            
+            <label class="col-sm-2 control-label">Desconto</label>
+            <div class="col-sm-2">
+                <input class="form-control" ng-model="compra.desconto" ng-change="calculaDesconto(compra.desconto, compra.subtotal);" type="text">                
+            </div>           
+            <label class="col-sm-2 control-label">Frete/Entrega</label>
+            <div class="col-sm-2">
+                <input class="form-control" ng-model="compra.frete_taxa" ng-change="calculaTaxa(compra.frete_taxa, compra.subtotal, compra.desconto);" type="text">                
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Valor Total</label>
+            <div class="col-sm-2">
+                <input class="form-control" ng-model="compra.valor_total" type="text">                
+            </div>
+            <label class="col-sm-2 control-label">Dinheiro</label>
+            <div class="col-sm-2">
+                <input class="form-control" ng-model="compra.dinheiro" ng-change="calculaTroco(compra.dinheiro, compra.valor_total)" type="text">                
+            </div>
+            <label class="col-sm-2 control-label">Troco</label>
+            <div class="col-sm-2">
+                <input class="form-control" ng-model="compra.troco" type="text">                
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="imposto">Imposto</label>
+            <div class="col-sm-3">
+                <input type="text" ng-model="compra.imposto" id="imposto" class="form-control" />
+            </div>
+            <label class="col-sm-2 control-label">Obs</label>
+            <div class="col-sm-3">
+                <input type="text" ng-model="compra.obs" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="tags">Tags</label>
+            <div class="col-sm-3">
+                <input type="text" ng-model="compra.tags" id="tags" class="form-control" />
+            </div>
+            <label class="col-sm-2 control-label">Vendedor/Caixa</label>
+            <div class="col-sm-3">
+                <input type="text" ng-model="compra.vendedor_caixa" class="form-control" />
+            </div>
+        </div>
+        <hr>
+
+        <fieldset ng-show="compra.tipo === 7" id="fd_passagem">
+            <legend>Passagem</legend>
+            <div class="form-group">
+                <label class="col-sm-1 control-label">De onde</label>
+                <div class="col-sm-3">
+                    <input type="text" ng-model="compra.de_onde" class="form-control" />
+                </div>
+                <label class="col-sm-2 control-label">Data Viagem</label>
+                <div class="col-sm-3">
+                    <div class="dropdown">
+                        <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" >
+                            <div class="input-group"><input type="text" class="form-control" data-ng-model="compra.data_viagem"><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                            <datetimepicker data-ng-model="compra.data_viagem" data-datetimepicker-config="{ dropdownSelector: '#dropdown2',minuteStep:1 }"/>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <input type="text" ng-model="compra.poltrona" placeholder="Poltrona" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Destino Passagem</label>
+                <div class="col-sm-2">
+                    <input type="text" ng-model="compra.destino_passagem" class="form-control" />
+                </div>
+                <label class="col-sm-2 control-label">Destino Comprado</label>
+                <div class="col-sm-2">
+                    <input type="text" ng-model="compra.destino_comprado" class="form-control" />
+                </div>
+                <label class="col-sm-2 control-label">Destino Real</label>
+                <div class="col-sm-2">
+                    <input type="text" ng-model="compra.destino_real" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Motivo da Viagem</label>
+                <div class="col-sm-4">
+                    <input type="text" ng-model="compra.motivo_viagem" class="form-control" />
+                </div>
+            </div>
+        </fieldset>
+        <div class="text-center">
+            <input type="submit" class="btn btn-primary">
+        </div>
+        <div class="alert alert-success">
+            <p>{{result}}</p>
+        </div>
+    </form>
+</div>

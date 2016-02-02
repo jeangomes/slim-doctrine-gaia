@@ -1,0 +1,28 @@
+<div ng-init="load()">
+    <p>{{autores.length}} registros encontrados</p>
+    <table class="table table-condensed table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Sexo</th>
+                <th>Nacionalidade</th>
+                <th>Data Cadastro</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="autor in autores| orderBy:'nome'">
+                <td>{{autor.nome}}</td>
+                <td>{{autor.sexo}}</td>
+                <td>{{autor.nacionalidade}}</td>
+                <td>{{autor.data_cadastro.date| date:'medium'}}</td>
+                <td>
+                    <div class="btn-group">
+                        <a href="#/edit-autor/{{autor.id}}" class="btn btn-info">Editar</a>
+                        <button ng-click="delete(autor.id, $index)" class="btn btn-warning">Excluir</button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

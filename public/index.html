@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html ng-app="CrudApp" lang="pt-br">
+    <head>
+        <meta charset='utf-8'>        
+        <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+        <link rel='stylesheet' href="assets/css/loading-bar.min.css" type='text/css' media='all' />
+        <link rel="stylesheet" href="bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css"/>
+        
+        <script type="text/javascript" src="assets/angular.min.js"></script>
+        <script type="text/javascript" src="assets/angular-route.min.js"></script>
+        <script type="text/javascript" src="assets/ui-bootstrap-tpls-0.13.0.min.js"></script>
+        <script src="bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="bower_components/bootstrap/js/dropdown.js"></script>
+        <script type="text/javascript" src="assets/angular-resource.min.js"></script>                        
+        <script type="text/javascript" src="bower_components/moment/moment.js"></script>
+        <script type="text/javascript" src="bower_components/moment/locale/pt-br.js"></script>
+        <script type="text/javascript" src="assets/angular-locale_pt-br.js"></script>
+        <script>
+            moment.locale('pt-br');  // Set the default/global locale
+        </script>
+        <script type="text/javascript" src="bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js"></script>
+        <script type="text/javascript" src="assets/angular-animate.min.js"></script>
+        <script type='text/javascript' src="assets/loading-bar.min.js"></script>
+        
+        <script type="text/javascript" src="app.js"></script>
+        <script type="text/javascript" src="routes.js"></script>
+        <script type="text/javascript" src="services.js"></script>
+        <script type="text/javascript" src="controllers.js"></script>
+        <script type="text/javascript" src="directives.js"></script>
+        <title>Gaia - {{ title}}</title>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-2">
+                    <nav class="navbar-default navbar-side" role="navigation" ng-controller="CtrlMenu">
+                        <div class="collapse navbar-collapse" ng-class="!navCollapsed && 'in'" >
+                            <ul class="nav" id="main-menu" ng-init="povoarMenu()">
+                                <li ng-repeat="item in mainMenu" class="dropdown" dropdown on-toggle="toggled(open)">
+                                    <a class="dropdown-toggle" dropdown-toggle href="#"><i class="fa fa-{{item.icon}}"></i> {{item.lbl}}<span class="fa arrow"></span></a>
+                                    <ul class="dropdown-menu nav-second-level">
+                                        <li><a href="#/add-{{item.url}}"><i class="fa fa-circle-o"></i> Cadastrar</a></li>
+                                        <li><a href="#/{{item.url}}"><i class="fa fa-circle"></i> Pesquisar/Listar</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+                <div class="col-lg-10">
+                    <div style="margin-top: 20px;" class="page-header">
+                        <h1 style="margin-top: 10px;">Gaia - {{ title}}</h1>
+                    </div>
+                    <div ng-view></div>
+                </div>
+            </div>            
+        </div>
+    </body>
+</html>
